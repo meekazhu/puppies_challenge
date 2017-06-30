@@ -1,6 +1,7 @@
 # Puppies App
 
 ### Project setup and deployment 
+
 #Required for installation
 Install nodeJS v6.11.0
 https://nodejs.org/en/download/
@@ -57,5 +58,5 @@ This can be useful for lazy loading, incase the client doesn't want to retrieve 
 
 ### Caveats 
 - There is no API support for authentication. Hence there is no way to ensure that whoever is doing GET/POST/PUT/DELETE has access to the respective data. If basic authentication was supported, all API's will need to validate the authentication key from the headers of the client's HTTP requests. Authentication key is a key returned to the client from the server whenever it validates the credentials.
-
 - Also TODOs are commented in the code
+
