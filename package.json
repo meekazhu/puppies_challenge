@@ -24,8 +24,9 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "connect-busboy": "0.0.2",
     "express": "^4.15.3",
-    "mongoose": "^4.11.0",
+    "mongoose": "^4.11.0"
   }
 }
