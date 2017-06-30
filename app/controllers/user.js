@@ -13,11 +13,11 @@ var user_cb =
 		return function(err, user) {
 
 			if (err)
-				res.status(500).send(err);
+			res.status(500).send(err);
+			
 			user.set('password', undefined, {
 				strict: false
 			});
-
 
 			res.json(user);
 		}
