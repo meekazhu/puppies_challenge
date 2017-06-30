@@ -35,19 +35,18 @@ describe('Users', function() {
         email: 'newuser2@blah.com'
       })
       .end(function(err, res) {
-        console.log(res.body);
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.have.property('username');
-        res.body.should.have.property('_id');
+        res.body.should.have.property('user_id');
         res.body.should.have.property('email');
         done();
       });
   });
 
-  describe('/GET user/:user_id', () => {
+  describe('Returns a user requested using user_id', () => {
 
-    it('should list a SINGLE user on /user/<user_id> GET', function(done) {
+    it('should list a SINGLE user on user/:user_id GET', function(done) {
       var newUser = User({
         username: "newuser",
         password: "password",
@@ -63,7 +62,7 @@ describe('Users', function() {
             res.should.have.status(200);
             res.should.be.json;
             res.body.should.have.property('username');
-            res.body.should.have.property('_id');
+            res.body.should.have.property('user_id');
             res.body.should.have.property('email');
             res.body.should.have.property('liked_posts');
             res.body.should.have.property('posts');
@@ -94,8 +93,9 @@ describe('Users', function() {
           res.should.have.status(200);
 
           chai.request(server)
-            .get('/image/' + res.body.post_id)
+            .get('/image/post/' + res.body.post_id)
             .end(function(err, res) {
+
               res.should.have.status(200);
               done();
             });
@@ -124,6 +124,7 @@ describe('Users', function() {
         chai.request(server)
           .put('/user/' + newUser.id + '/post/' + newPost.id + '/like/')
           .end(function(err, res) {
+
             res.should.have.status(200);
             done();
           });
@@ -148,6 +149,13 @@ describe('Users', function() {
             res.body.text.should.equal(post.text);
             res.body.should.have.property('title');
             res.body.title.should.equal(post.title);
+            res.body.should.have.property('post_id');
+            res.body.post_id.should.equal(post.id);
+            res.body.should.have.property('date');
+            //TODO somehow mongoose is returning a different
+            //date format than it is stored
+            //res.body.date.should.equal(post.date);
+            res.body.likes.should.deep.equal([]);
 
             done();
           });
@@ -180,10 +188,24 @@ describe('Users', function() {
               res.body[1].text.should.equal(post.text);
               res.body[1].should.have.property('title');
               res.body[1].title.should.equal(post.title);
+              res.body[1].should.have.property('post_id');
+              res.body[1].post_id.should.equal(post.id);
+              res.body[1].should.have.property('date');
+              //TODO somehow mongoose is returning a different
+              //date format than it is stored
+              //res.body.date.should.equal(post.date);
+              res.body[1].likes.should.deep.equal([]);
               res.body[0].should.have.property('text');
               res.body[0].text.should.equal(posttwo.text);
               res.body[0].should.have.property('title');
               res.body[0].title.should.equal(posttwo.title);
+              res.body[0].should.have.property('post_id');
+              res.body[0].post_id.should.equal(posttwo.id);
+              res.body[0].should.have.property('date');
+              //TODO somehow mongoose is returning a different
+              //date format than it is stored
+              //res.body.date.should.equal(post.date);
+              res.body[0].likes.should.deep.equal([]);
 
               done();
             });
@@ -193,7 +215,7 @@ describe('Users', function() {
     });
   });
 
-  describe('/GET user/:user_id/posts', () => {
+  describe('Get all posts created by the user', () => {
     it('should list a ALL posts by user on /user/:user_id/posts GET', function(done) {
 
       var newUser = User({
@@ -224,15 +246,33 @@ describe('Users', function() {
               .get('/user/' + newUser.id + '/posts')
               .end(function(err, res) {
 
-                res.body[1].should.have.property('text');
-                res.body[1].text.should.equal(post.text);
-                res.body[1].should.have.property('title');
-                res.body[1].title.should.equal(post.title);
-                res.body[0].should.have.property('text');
-                res.body[0].text.should.equal(posttwo.text);
-                res.body[0].should.have.property('title');
-                res.body[0].title.should.equal(posttwo.title);
+              res.body[1].should.have.property('text');
+              res.body[1].text.should.equal(post.text);
+              res.body[1].should.have.property('title');
+              res.body[1].title.should.equal(post.title);
+              res.body[1].should.have.property('post_id');
+              res.body[1].post_id.should.equal(post.id);
+              res.body[1].should.have.property('date');
+              res.body[1].should.have.property('authorId');
+              res.body[1].authorId.should.equal(newUser.id);
 
+              //TODO somehow mongoose is returning a different
+              //date format than it is stored
+              //res.body.date.should.equal(post.date);
+              res.body[1].likes.should.deep.equal([]);
+              res.body[0].should.have.property('text');
+              res.body[0].text.should.equal(posttwo.text);
+              res.body[0].should.have.property('title');
+              res.body[0].title.should.equal(posttwo.title);
+              res.body[0].should.have.property('post_id');
+              res.body[0].post_id.should.equal(posttwo.id);
+              res.body[0].should.have.property('date');
+              res.body[0].should.have.property('authorId');
+              res.body[0].authorId.should.equal(newUser.id);
+              //TODO somehow mongoose is returning a different
+              //date format than it is stored
+              //res.body.date.should.equal(post.date);
+              res.body[0].likes.should.deep.equal([]);
                 done();
 
               });
@@ -290,7 +330,12 @@ describe('Users', function() {
                   res.body[0].text.should.equal(posttwo.text);
                   res.body[0].should.have.property('title');
                   res.body[0].title.should.equal(posttwo.title);
-
+                  res.body[0].should.have.property('likes');
+                  //TODO :Too sleepy to think!!! 
+                  //assert post.likes == user_id who has liked_posts
+                  //Need to update the post with the user in this test
+                  //though functionality works. 
+                  //res.body[0].likes.should.deep.equal([user.id]);
                   done();
                 });
             });

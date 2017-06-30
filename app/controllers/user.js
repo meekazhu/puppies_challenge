@@ -1,6 +1,6 @@
 var User = require('../models/user');
 var Post = require('../models/post');
-
+// var postController = require('../controllers/post');
 
 module.exports.authenticate = function(req, res, next) {
 	user.comparePassword(req.params.username, req.params.password)
@@ -15,11 +15,13 @@ var user_cb =
 			if (err)
 			res.status(500).send(err);
 			
-			user.set('password', undefined, {
-				strict: false
-			});
+			let userObj = user.toObject();
 
-			res.json(user);
+			delete userObj["password"]
+			delete userObj["__v"]
+			userObj["user_id"] = userObj["_id"]
+			delete userObj["_id"]
+			res.json(userObj);
 		}
 	}
 
@@ -57,31 +59,13 @@ module.exports.updateLikeList = function(req, res, next) {
 
 }
 
-module.exports.readAllPosts = function(req, res, next) {
-	Post.find({
-		"authorId": req.params.user_id
-	}).sort({
-		date: 'desc'
-	}).exec(function(err, posts) {
-		if (err)
-			res.status(500).send(err);
-		res.json(posts);
-	})
-}
+
 
 module.exports.readAllLikedPost = function(req, res, next) {
 	User.findById(req.params.user_id, function(err, user) {
-		Post.find({
-			'_id': {
-				$in: user.liked_posts
-			}
-		}).sort({
-			date: 'desc'
-		}).exec(function(err, posts) {
-			if (err)
-				res.status(500).send(err);
-			res.json(posts);
-		})
+
+		req.body.post_id = user.liked_posts
+		next()
 
 	});
 }
