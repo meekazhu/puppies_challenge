@@ -1,0 +1,31 @@
+{
+  "name": "puppies_challenge",
+  "version": "1.0.0",
+  "description": "A REST api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meekazhu/puppies_challenge.git"
+  },
+  "author": "Minna Liang (minnaliang138@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meekazhu/puppies_challenge/issues"
+  },
+  "homepage": "https://github.com/meekazhu/puppies_challenge#readme",
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.4.2",
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "connect-busboy": "0.0.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.0",
+  }
+}
