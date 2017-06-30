@@ -27,8 +27,8 @@ cd puppies_challenge/
 npm install
 npm start
 ```
-runs on [`localhost:3000/`]
-a running version is set up on AWS aswel, can access it [`13.59.212.68:3000/`]
+runs on `localhost:3000/`
+a running version is set up on AWS aswel, can access it `13.59.212.68:3000/`
 
 #Run the test
 
